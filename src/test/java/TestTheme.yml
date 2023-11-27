@@ -1,41 +1,5 @@
 name: TestTheme
 
-bg: 
-    background: ff0000
-    foreground: ffffff
-
-progress_bar: 
-    background: 000000
-    foreground: 0000FF
-
-list: 
-    background: 000000
-    foreground: ffffff
-    selectionBackground: 808080
-    selectionForeground: ffffff
-
-combo_box: 
-    background: FFFFFF
-    foreground: FF0000
-    selectionBackground: 000000
-    selectionForeground: FFFFFF
-    border: null
-    focus: null
-    disabledForeground: null
-    pressed: null
-    disabledBackground: null
-    toolTipBackground: null
-    toolTipText: null
-    shadow: null
-    highlight: null
-    linkColor: null
-    gridColor: null
-    thumb: null
-    track: null
-    arrowButtonBackground: 000000
-    arrowButtonForeground: 000000
-    caret: null
-
 button: 
     background: 00ff00
     foreground: 000000
@@ -58,6 +22,179 @@ button:
     arrowButtonForeground: null
     caret: null
     dragging: null
+    rollover: null
+
 
 splitpane: 
+    background: null
+    foreground: null
+    selectionBackground: null
+    selectionForeground: null
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
     dragging: 00ff00
+    rollover: null
+
+
+bg: 
+    background: f0f0f0
+    foreground: 000000
+    selectionBackground: null
+    selectionForeground: null
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+    rollover: null
+
+
+progress_bar: 
+    background: ff00ff
+    foreground: 000000
+    selectionBackground: null
+    selectionForeground: null
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+    rollover: null
+
+
+list: 
+    background: 000000
+    foreground: ffffff
+    selectionBackground: 808080
+    selectionForeground: ffffff
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+    rollover: null
+
+
+comboBox: 
+    background: 0000ff
+    foreground: ffc800
+    selectionBackground: 00ff00
+    selectionForeground: ffffff
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: 000000
+    arrowButtonForeground: 000000
+    caret: null
+    dragging: null
+    rollover: null
+
+
+table: 
+    background: 0000FF
+    foreground: null
+    selectionBackground: 00FF00
+    selectionForeground: FFFFFF
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: ff0000
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+    rollover: null
+
+toolbar:
+    background: 000000
+    foreground: null
+    selectionBackground: 00FF00
+    selectionForeground: FFFFFF
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: ff0000
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+    rollover: null  
+

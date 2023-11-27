@@ -35,6 +35,7 @@ public class Colors {
         public Color arrowButtonForeground = null; // For components with arrow buttons
         public Color caret = null;
         public Color dragging = null; // For split pane
+        public Color rollover = null;
 
         private boolean checkColors(Color... colors){
                 for(Color color : colors){
@@ -61,11 +62,15 @@ public class Colors {
         }
         
         protected boolean checkProgressBar(){
-            return checkColors(background, foreground, selectionForeground);
+            return checkColors(background, pressed, selectionBackground);
         }
         
         protected boolean checkComboBox(){
             return checkColors(background, foreground, selectionBackground, selectionForeground, arrowButtonBackground, arrowButtonForeground);
+        }
+        
+        protected boolean checkButton(){
+            return checkColors(background, pressed, rollover, disabledBackground);
         }
 
         // Same for every component
@@ -101,12 +106,19 @@ public class Colors {
                 appendColorPair(sb, "arrowButtonForeground", arrowButtonForeground);
                 appendColorPair(sb, "caret", caret);
                 appendColorPair(sb, "dragging", dragging);
+                appendColorPair(sb, "rollover", rollover);
 
                 return sb.toString();
         }
 
         private void appendColorPair(StringBuilder sb, String attributeName, Color color) {
                 sb.append("    ").append(attributeName).append(": ").append((color == null ? "null" : Utils.ColorToHex(color))).append("\n");
+        }
+        
+        public static void printEmptyYamlString(){
+            Colors c = new Colors();
+            c.key = "key";
+            System.out.println(c.toYAMLString());
         }
 
 }

@@ -37,6 +37,7 @@ import java.util.Set;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import kdesp73.themeLib.customuis.CustomButtonUI;
 import kdesp73.themeLib.customuis.CustomComboBoxUI;
 import kdesp73.themeLib.customuis.CustomProgressBarUI;
 
@@ -191,31 +192,19 @@ public class ThemeCollection {
                         colors.background)
                 );
             }
-        } else if (component instanceof JSplitPane) { // SplitPane
-            if (colors.background != null) {
-                UIManager.put("SplitPane.background", colors.background);
-            }
-
-            if (colors.foreground != null) {
-                UIManager.put("SplitPane.foreground", colors.foreground);
-            }
-
-            if (colors.thumb != null) {
+        } else if (component instanceof JSplitPane splitpane) { // SplitPane
+            if (colors.dragging != null) {
                 UIManager.put("SplitPaneDivider.draggingColor", colors.dragging);
             }
         } else if (component instanceof JProgressBar progressbar) { // ProgressBar
             if (colors.checkProgressBar()) {
-//                UIManager.put("ProgressBar.background", colors.background);
-//                UIManager.put("ProgressBar.foreground", colors.foreground);
-//                UIManager.put("ProgressBar.selectionBackground", colors.selectionBackground);
-//                UIManager.put("ProgressBar.selectionForeground", colors.selectionForeground);
 //                progressbar.setUI(new CustomProgressBarUI(
-//                        colors.foreground,
 //                        colors.background,
-//                        colors.selectionForeground)
-//                );
+//                        colors.selectionBackground,
+//                        colors.foreground
+//                ));
             }
-        } else if (component instanceof JComboBox combobox) {
+        } else if (component instanceof JComboBox combobox) { // ComboBox
             if (colors.checkComboBox()) {
                 combobox.getEditor().getEditorComponent().setBackground(colors.background);
                 combobox.setUI(new CustomComboBoxUI(
@@ -224,9 +213,16 @@ public class ThemeCollection {
                         colors.selectionBackground,
                         colors.selectionForeground,
                         colors.arrowButtonBackground,
-                        colors.arrowButtonForeground)
-                );
+                        colors.arrowButtonForeground
+                ));
             }
+        } else if(component instanceof JButton button) { // Button
+            if(colors.checkButton()){
+                button.setUI(new CustomButtonUI(colors.background, colors.pressed, colors.rollover, colors.disabledBackground));
+                button.setForeground(colors.foreground);
+            }
+        } else if(component instanceof JMenuBar menubar){ // MenuBar
+           
         }
     }
 

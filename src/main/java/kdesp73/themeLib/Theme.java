@@ -157,6 +157,7 @@ public class Theme extends HashMap<String, Colors> {
             colors.arrowButtonForeground = Utils.hexToColor(colorAttributes.get("arrowButtonForeground"));
             colors.caret = Utils.hexToColor(colorAttributes.get("caret"));
             colors.dragging = Utils.hexToColor(colorAttributes.get("dragging"));
+            colors.rollover = Utils.hexToColor(colorAttributes.get("rollover"));
 
             // Add Colors object to the theme
             this.put(componentName, colors);
@@ -254,6 +255,7 @@ public class Theme extends HashMap<String, Colors> {
         appendColorAttribute(sb, "arrowButtonBackground", colors.arrowButtonBackground);
         appendColorAttribute(sb, "arrowButtonForeground", colors.arrowButtonForeground);
         appendColorAttribute(sb, "caret", colors.caret);
+        appendColorAttribute(sb, "rollover", colors.rollover);
     }
 
     private void appendColorAttribute(StringBuilder sb, String key, Object value) {
