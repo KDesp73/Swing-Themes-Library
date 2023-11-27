@@ -72,42 +72,92 @@ public class ThemeCollection {
 
                         Colors colors = theme.get(key);
 
-                        component.setBackground(colors.background);
-                        component.setForeground(colors.foreground);
+                        if (colors.background != null) {
+                                component.setBackground(colors.background);
+                        }
+
+                        if (colors.foreground != null) {
+                                component.setForeground(colors.foreground);
+                        }
 
                         if (component instanceof JComponent jcomponent) { // Component
-                                Utils.changeBorderColor(jcomponent, colors.border);
+                                if (colors.border != null) {
+                                        Utils.changeBorderColor(jcomponent, colors.border);
+                                }
                         }
 
                         if (component instanceof JTextComponent textcomponent) { // TextComponents
-                                textcomponent.setCaretColor(colors.caret);
-                                textcomponent.setDisabledTextColor(colors.disabledText);
-                                textcomponent.setSelectionColor(colors.selectionBackground);
-                                textcomponent.setSelectedTextColor(colors.selectionForeground);
-                                Utils.changeHighlightColor(textcomponent, colors.highlight);
+                                if (colors.caret != null) {
+                                        textcomponent.setCaretColor(colors.caret);
+                                }
+
+                                if (colors.disabledForeground != null) {
+                                        textcomponent.setDisabledTextColor(colors.disabledForeground);
+                                }
+
+                                if (colors.selectionBackground != null) {
+                                        textcomponent.setSelectionColor(colors.selectionBackground);
+                                }
+
+                                if (colors.selectionForeground != null) {
+                                        textcomponent.setSelectedTextColor(colors.selectionForeground);
+                                }
+
+                                if (colors.highlight != null) {
+                                        Utils.changeHighlightColor(textcomponent, colors.highlight);
+                                }
                         } else if (component instanceof JSlider slider) { // Slider
-                                slider.setUI(new CustomSliderUI(slider, colors.track, colors.thumb, colors.focus));
+                                if (colors.checkSlider()) {
+                                        slider.setUI(new CustomSliderUI(slider, colors.track, colors.thumb, colors.focus));
+                                }
                         } else if (component instanceof JScrollPane scrollpane) { // Scrollbars
-                                scrollpane.getVerticalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
-                                scrollpane.getHorizontalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
+                                if (colors.checkScrollBar()) {
+                                        scrollpane.getVerticalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
+                                        scrollpane.getHorizontalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
+                                }
                         } else if (component instanceof JList list) { // List
-                                list.setSelectionBackground(colors.selectionBackground);
-                                list.setSelectionForeground(colors.selectionForeground);
+                                if (colors.selectionBackground != null) {
+                                        list.setSelectionBackground(colors.selectionBackground);
+                                }
+
+                                if (colors.selectionForeground != null) {
+                                        list.setSelectionForeground(colors.selectionForeground);
+                                }
                         } else if (component instanceof JTable table) { // Table
-                                table.setGridColor(colors.gridColor);
-                                table.setSelectionBackground(colors.selectionBackground);
-                                table.setSelectionForeground(colors.selectionForeground);
+                                if (colors.gridColor != null) {
+                                        table.setGridColor(colors.gridColor);
+                                }
+
+                                if (colors.selectionBackground != null) {
+                                        table.setSelectionBackground(colors.selectionBackground);
+                                }
+
+                                if (colors.selectionForeground != null) {
+                                        table.setSelectionForeground(colors.selectionForeground);
+                                }
                         } else if (component instanceof JSpinner spinner) { // Spinner
-                                spinner.setUI(new CustomSpinnerUI(colors.background, colors.foreground, colors.arrowButtonBackground, colors.arrowButtonForeground, colors.disabledText));
+                                if (colors.checkSpinner()) {
+                                        spinner.setUI(new CustomSpinnerUI(colors.background, colors.foreground, colors.arrowButtonBackground, colors.arrowButtonForeground, colors.disabledForeground));
+                                }
                         } else if (component instanceof JTabbedPane tabbedpane) { // TabbedPane
-                                tabbedpane.setUI(new CustomTabbedPaneUI(colors.background, colors.foreground, colors.selectionBackground, colors.selectionForeground, colors.background));
+                                if (colors.checkTabbedPane()) {
+                                        tabbedpane.setUI(new CustomTabbedPaneUI(colors.background, colors.foreground, colors.selectionBackground, colors.selectionForeground, colors.background));
+                                }
                         } else if (component instanceof JSplitPane) { // SplitPane
-                                UIManager.put("SplitPane.background", colors.background);
-                                UIManager.put("SplitPane.foreground", colors.foreground);
-                                UIManager.put("SplitPaneDivider.draggingColor", colors.thumb);
+                                if (colors.background != null) {
+                                        UIManager.put("SplitPane.background", colors.background);
+                                }
+
+                                if (colors.foreground != null) {
+                                        UIManager.put("SplitPane.foreground", colors.foreground);
+                                }
+
+                                if (colors.thumb != null) {
+                                        UIManager.put("SplitPaneDivider.draggingColor", colors.thumb);
+                                }
                         }
                 }
-                
+
                 // Recurse through every component
                 if (component instanceof Container container) {
                         for (Component child : container.getComponents()) {

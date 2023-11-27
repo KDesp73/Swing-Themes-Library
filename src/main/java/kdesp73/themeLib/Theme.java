@@ -97,7 +97,7 @@ public class Theme extends HashMap<String, Colors> {
                         colors.selectionForeground = Utils.hexToColor(colorAttributes.get("selectionForeground"));
                         colors.border = Utils.hexToColor(colorAttributes.get("border"));
                         colors.focus = Utils.hexToColor(colorAttributes.get("focus"));
-                        colors.disabledText = Utils.hexToColor(colorAttributes.get("disabledText"));
+                        colors.disabledForeground = Utils.hexToColor(colorAttributes.get("disabledForeground"));
                         colors.pressed = Utils.hexToColor(colorAttributes.get("pressed"));
                         colors.disabledBackground = Utils.hexToColor(colorAttributes.get("disabledBackground"));
                         colors.toolTipBackground = Utils.hexToColor(colorAttributes.get("toolTipBackground"));
@@ -195,7 +195,7 @@ public class Theme extends HashMap<String, Colors> {
                 appendColorAttribute(sb, "selectionForeground", colors.selectionForeground);
                 appendColorAttribute(sb, "border", colors.border);
                 appendColorAttribute(sb, "focus", colors.focus);
-                appendColorAttribute(sb, "disabledText", colors.disabledText);
+                appendColorAttribute(sb, "disabledForeground", colors.disabledForeground);
                 appendColorAttribute(sb, "pressed", colors.pressed);
                 appendColorAttribute(sb, "disabledBackground", colors.disabledBackground);
                 appendColorAttribute(sb, "toolTipBackground", colors.toolTipBackground);

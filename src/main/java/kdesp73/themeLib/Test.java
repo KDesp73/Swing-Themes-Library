@@ -15,9 +15,9 @@ import javax.swing.JButton;
  */
 public class Test {
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		Theme theme = Theme.parseYaml("/home/konstantinos/Documents/TestTheme.yml");
-		System.out.println(theme);
+        public static void main(String[] args) throws FileNotFoundException, IOException {
+                Theme theme = Theme.parseYaml("/home/konstantinos/Documents/TestTheme.yml");
+                System.out.println(theme);
 
 //		Theme t = new Theme("TestTheme");
 //		Colors c = new Colors();
@@ -35,5 +35,5 @@ public class Test {
 //		t.put("button", c);
 //
 //		t.generateYaml("/home/konstantinos/Documents/");
-	}
+        }
 }
