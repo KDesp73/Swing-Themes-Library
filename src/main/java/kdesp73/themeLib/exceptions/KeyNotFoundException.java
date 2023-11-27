@@ -24,13 +24,13 @@
 * 
 */
 
-package kdesp73.themeLib;
+package kdesp73.themeLib.exceptions;
 
 /**
  *
  * @author KDesp73
  */
-class KeyNotFoundException extends RuntimeException{
+public class KeyNotFoundException extends RuntimeException{
         public KeyNotFoundException(String err){
                 super(err);
         }

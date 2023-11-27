@@ -16,7 +16,7 @@ import javax.swing.JButton;
 public class Test {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		Theme theme = Theme.parseYaml(new YamlFile("/home/konstantinos/Documents/TestTheme.yml"));
+		Theme theme = Theme.parseYaml("/home/konstantinos/Documents/TestTheme.yml");
 		System.out.println(theme);
 
 //		Theme t = new Theme("TestTheme");

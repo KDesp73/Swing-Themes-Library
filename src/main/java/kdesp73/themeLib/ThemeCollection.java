@@ -25,6 +25,10 @@
  */
 package kdesp73.themeLib;
 
+import kdesp73.themeLib.customuis.CustomScrollPaneUI;
+import kdesp73.themeLib.customuis.CustomTabbedPaneUI;
+import kdesp73.themeLib.customuis.CustomSpinnerUI;
+import kdesp73.themeLib.customuis.CustomSliderUI;
 import java.awt.Component;
 import java.awt.Container;
 import java.io.File;
@@ -142,9 +146,9 @@ public class ThemeCollection {
 
                         // You can perform OS-specific operations based on the value of osName
                         if (osName.toLowerCase().contains("windows")) {
-                                newTheme = new Theme(new YamlFile(file.getPath() + "\\" + yamlFiles.get(i)));
+                                newTheme = new Theme(new File(file.getPath() + "\\" + yamlFiles.get(i)));
                         } else if (osName.toLowerCase().contains("linux")) {
-                                newTheme = new Theme(new YamlFile(file.getPath() + "/" + yamlFiles.get(i)));
+                                newTheme = new Theme(new File(file.getPath() + "/" + yamlFiles.get(i)));
                         } else {
                                 System.out.println("Unsupported operating system.");
                         }

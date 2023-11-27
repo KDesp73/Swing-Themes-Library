@@ -25,6 +25,7 @@
  */
 package kdesp73.themeLib;
 
+import kdesp73.themeLib.exceptions.KeyNotFoundException;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,184 +46,173 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class Theme extends HashMap<String, Colors> {
 
-	private String name;
-	private YamlFile yaml;
+        private String name;
 
-	/**
-	 * Creates a theme using a YAML file
-	 *
-	 * @param yaml YamlFile object to be parsed
-	 */
-	public Theme(YamlFile yaml) {
-		this.yaml = yaml;
+        /**
+         * Creates a theme using a YAML file
+         *
+         * @param file
+         */
+        public Theme(File file) {
+                try {
+                        // Parse yaml into theme
+                        parseYaml(file.getAbsolutePath());
+                } catch (KeyNotFoundException | IOException ex) {
+                        Logger.getLogger(Theme.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
 
-		try {
-			// Parse yaml into theme
-			parseYaml(yaml);
-		} catch (KeyNotFoundException | IOException ex) {
-			Logger.getLogger(Theme.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+        /**
+         * Default constructor
+         */
+        public Theme() {
+        }
 
-	/**
-	 * Default constructor
-	 */
-	public Theme() {
-	}
+        public Theme(String name) {
+                this.name = name;
+        }
 
-	public Theme(String name) {
-		this.name = name;
-	}
+        public static Theme parseYaml(String path) throws IOException {
+                Yaml yaml = new Yaml();
+                Map<String, Object> yamlData = yaml.load(Utils.readFile(path));
 
-	public static Theme parseYaml(YamlFile file) throws IOException {
-		Yaml yaml = new Yaml();
-		Map<String, Object> yamlData = yaml.load(Utils.readFile(file.getDirectory()));
+                // Extract the name of the theme
+                String themeName = (String) yamlData.get("name");
+                Theme theme = new Theme(themeName);
 
-		// Extract the name of the theme
-		String themeName = (String) yamlData.get("name");
-		Theme theme = new Theme(themeName);
+                // Remove the name entry from the map as it's already assigned to the theme
+                yamlData.remove("name");
 
-		// Remove the name entry from the map as it's already assigned to the theme
-		yamlData.remove("name");
+                // Iterate through the remaining entries and create Colors objects
+                for (Map.Entry<String, Object> entry : yamlData.entrySet()) {
+                        String componentName = entry.getKey();
+                        Map<String, Object> colorAttributes = (LinkedHashMap<String, Object>) entry.getValue();
 
-		// Iterate through the remaining entries and create Colors objects
-		for (Map.Entry<String, Object> entry : yamlData.entrySet()) {
-			String componentName = entry.getKey();
-			Map<String, Object> colorAttributes = (LinkedHashMap<String, Object>) entry.getValue();
+                        Colors colors = new Colors();
+                        colors.key = componentName;
 
-			Colors colors = new Colors();
-			colors.key = componentName;
+                        colors.background = Utils.hexToColor(colorAttributes.get("background"));
+                        colors.foreground = Utils.hexToColor(colorAttributes.get("foreground"));
+                        colors.selectionBackground = Utils.hexToColor(colorAttributes.get("selectionBackground"));
+                        colors.selectionForeground = Utils.hexToColor(colorAttributes.get("selectionForeground"));
+                        colors.border = Utils.hexToColor(colorAttributes.get("border"));
+                        colors.focus = Utils.hexToColor(colorAttributes.get("focus"));
+                        colors.disabledText = Utils.hexToColor(colorAttributes.get("disabledText"));
+                        colors.pressed = Utils.hexToColor(colorAttributes.get("pressed"));
+                        colors.disabledBackground = Utils.hexToColor(colorAttributes.get("disabledBackground"));
+                        colors.toolTipBackground = Utils.hexToColor(colorAttributes.get("toolTipBackground"));
+                        colors.toolTipText = Utils.hexToColor(colorAttributes.get("toolTipText"));
+                        colors.shadow = Utils.hexToColor(colorAttributes.get("shadow"));
+                        colors.highlight = Utils.hexToColor(colorAttributes.get("highlight"));
+                        colors.linkColor = Utils.hexToColor(colorAttributes.get("linkColor"));
+                        colors.gridColor = Utils.hexToColor(colorAttributes.get("gridColor"));
+                        colors.thumb = Utils.hexToColor(colorAttributes.get("thumb"));
+                        colors.track = Utils.hexToColor(colorAttributes.get("track"));
+                        colors.arrowButtonBackground = Utils.hexToColor(colorAttributes.get("arrowButtonBackground"));
+                        colors.arrowButtonForeground = Utils.hexToColor(colorAttributes.get("arrowButtonForeground"));
 
-			colors.background = Utils.hexToColor(colorAttributes.get("background"));
-			colors.foreground = Utils.hexToColor(colorAttributes.get("foreground"));
-			colors.selectionBackground = Utils.hexToColor(colorAttributes.get("selectionBackground"));
-			colors.selectionForeground = Utils.hexToColor(colorAttributes.get("selectionForeground"));
-			colors.border = Utils.hexToColor(colorAttributes.get("border"));
-			colors.focus = Utils.hexToColor(colorAttributes.get("focus"));
-			colors.disabledText = Utils.hexToColor(colorAttributes.get("disabledText"));
-			colors.pressed = Utils.hexToColor(colorAttributes.get("pressed"));
-			colors.disabledBackground = Utils.hexToColor(colorAttributes.get("disabledBackground"));
-			colors.toolTipBackground = Utils.hexToColor(colorAttributes.get("toolTipBackground"));
-			colors.toolTipText = Utils.hexToColor(colorAttributes.get("toolTipText"));
-			colors.shadow = Utils.hexToColor(colorAttributes.get("shadow"));
-			colors.highlight = Utils.hexToColor(colorAttributes.get("highlight"));
-			colors.linkColor = Utils.hexToColor(colorAttributes.get("linkColor"));
-			colors.gridColor = Utils.hexToColor(colorAttributes.get("gridColor"));
-			colors.thumb = Utils.hexToColor(colorAttributes.get("thumb"));
-			colors.track = Utils.hexToColor(colorAttributes.get("track"));
-			colors.arrowButtonBackground = Utils.hexToColor(colorAttributes.get("arrowButtonBackground"));
-			colors.arrowButtonForeground = Utils.hexToColor(colorAttributes.get("arrowButtonForeground"));
+                        // Add Colors object to the theme
+                        theme.put(componentName, colors);
+                }
 
-			// Add Colors object to the theme
-			theme.put(componentName, colors);
-		}
+                return theme;
+        }
 
-		return theme;
-	}
+        /**
+         * Generate a YAML file containing the information of this Theme object
+         *
+         * @param path The directory into which the YAML file will be created
+         * @return YamlFile object
+         * @throws FileNotFoundException
+         */
+        public boolean generateYaml(String path) throws FileNotFoundException {
+                char slash = System.getProperty("os.name").toLowerCase().contains("linux") ? '/' : '\\';
+                if (path.charAt(path.length() - 1) != slash) {
+                        path += slash;
+                }
 
-	/**
-	 * Generate a YAML file containing the
-	 * information of this Theme object
-	 *
-	 * @param path The directory into which the
-	 * YAML file will be created
-	 * @return YamlFile object
-	 * @throws FileNotFoundException
-	 */
-	public YamlFile generateYaml(String path) throws FileNotFoundException {
-		char slash = System.getProperty("os.name").toLowerCase().contains("linux") ? '/' : '\\';
-		if (path.charAt(path.length() - 1) != slash) {
-			path += slash;
-		}
+                path = path + name + ".yml";
 
-		path = path + name + ".yml";
+                try (PrintWriter writer = new PrintWriter(new File(path))) {
+                        writer.write("name: " + name);
+                        writer.write("\n");
+                        writer.write("\n");
 
-		try (PrintWriter writer = new PrintWriter(new File(path))) {
-			writer.write("name: " + name);
-			writer.write("\n");
-			writer.write("\n");
+                        Set<String> keys = this.keySet();
 
-			Set<String> keys = this.keySet();
+                        for (String key : keys) {
+                                writer.write(this.get(key).toYAMLString());
+                                writer.write("\n");
+                                writer.write("\n");
+                        }
 
-			for (String key : keys) {
-				writer.write(this.get(key).toYAMLString());
-				writer.write("\n");
-				writer.write("\n");
-			}
+                        writer.write("\n");
+                } catch(Exception e){
+                        return false;
+                }
 
-			writer.write("\n");
-		}
+                return true;
+        }
 
-		return new YamlFile(path);
-	}
+        @Override
+        public Colors put(String key, Colors value) {
+                value.key = key;
+                return super.put(key, value);
+        }
 
-	@Override
-	public Colors put(String key, Colors value) {
-		value.key = key;
-		return super.put(key, value);
-	}
+        public String getName() {
+                return name;
+        }
 
-	public String getName() {
-		return name;
-	}
+        public void setName(String name) {
+                this.name = name;
+        }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+        @Override
+        public String toString() {
+                StringBuilder sb = new StringBuilder();
 
-	public YamlFile getYaml() {
-		return yaml;
-	}
+                Set<String> keys = this.keySet();
 
-	public void setYaml(YamlFile yaml) {
-		this.yaml = yaml;
-	}
+                sb.append(name).append(" = {").append("\n");
+                for (String key : keys) {
+                        sb.append("    ").append(key).append(" = {").append("\n");
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
+                        appendColorAttributes(sb, this.get(key));
 
-		Set<String> keys = this.keySet();
+                        sb.append("    ").append("}\n");
+                }
 
-		sb.append(name).append(" = {").append("\n");
-		for (String key : keys) {
-			sb.append("    ").append(key).append(" = {").append("\n");
+                sb.append("}");
 
-			appendColorAttributes(sb, this.get(key));
+                return sb.toString();
+        }
 
-			sb.append("    ").append("}\n");
-		}
+        private void appendColorAttributes(StringBuilder sb, Colors colors) {
+                appendColorAttribute(sb, "background", colors.background);
+                appendColorAttribute(sb, "foreground", colors.foreground);
+                appendColorAttribute(sb, "selectionBackground", colors.selectionBackground);
+                appendColorAttribute(sb, "selectionForeground", colors.selectionForeground);
+                appendColorAttribute(sb, "border", colors.border);
+                appendColorAttribute(sb, "focus", colors.focus);
+                appendColorAttribute(sb, "disabledText", colors.disabledText);
+                appendColorAttribute(sb, "pressed", colors.pressed);
+                appendColorAttribute(sb, "disabledBackground", colors.disabledBackground);
+                appendColorAttribute(sb, "toolTipBackground", colors.toolTipBackground);
+                appendColorAttribute(sb, "toolTipText", colors.toolTipText);
+                appendColorAttribute(sb, "shadow", colors.shadow);
+                appendColorAttribute(sb, "highlight", colors.highlight);
+                appendColorAttribute(sb, "linkColor", colors.linkColor);
+                appendColorAttribute(sb, "gridColor", colors.gridColor);
+                appendColorAttribute(sb, "thumb", colors.thumb);
+                appendColorAttribute(sb, "track", colors.track);
+                appendColorAttribute(sb, "arrowButtonBackground", colors.arrowButtonBackground);
+                appendColorAttribute(sb, "arrowButtonForeground", colors.arrowButtonForeground);
+                appendColorAttribute(sb, "carret", colors.caret);
+        }
 
-		sb.append("}");
-
-		return sb.toString();
-	}
-
-	private void appendColorAttributes(StringBuilder sb, Colors colors) {
-		appendColorAttribute(sb, "background", colors.background);
-		appendColorAttribute(sb, "foreground", colors.foreground);
-		appendColorAttribute(sb, "selectionBackground", colors.selectionBackground);
-		appendColorAttribute(sb, "selectionForeground", colors.selectionForeground);
-		appendColorAttribute(sb, "border", colors.border);
-		appendColorAttribute(sb, "focus", colors.focus);
-		appendColorAttribute(sb, "disabledText", colors.disabledText);
-		appendColorAttribute(sb, "pressed", colors.pressed);
-		appendColorAttribute(sb, "disabledBackground", colors.disabledBackground);
-		appendColorAttribute(sb, "toolTipBackground", colors.toolTipBackground);
-		appendColorAttribute(sb, "toolTipText", colors.toolTipText);
-		appendColorAttribute(sb, "shadow", colors.shadow);
-		appendColorAttribute(sb, "highlight", colors.highlight);
-		appendColorAttribute(sb, "linkColor", colors.linkColor);
-		appendColorAttribute(sb, "gridColor", colors.gridColor);
-		appendColorAttribute(sb, "thumb", colors.thumb);
-		appendColorAttribute(sb, "track", colors.track);
-		appendColorAttribute(sb, "arrowButtonBackground", colors.arrowButtonBackground);
-		appendColorAttribute(sb, "arrowButtonForeground", colors.arrowButtonForeground);
-		appendColorAttribute(sb, "carret", colors.caret);
-	}
-
-	private void appendColorAttribute(StringBuilder sb, String key, Object value) {
-		sb.append("        ").append(key).append(" = ").append(value).append("\n");
-	}
+        private void appendColorAttribute(StringBuilder sb, String key, Object value) {
+                sb.append("        ").append(key).append(" = ").append(value).append("\n");
+        }
 
 }

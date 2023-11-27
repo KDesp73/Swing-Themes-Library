@@ -1,4 +1,4 @@
-package kdesp73.themeLib;
+package kdesp73.themeLib.customuis;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
