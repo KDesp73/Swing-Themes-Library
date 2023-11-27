@@ -3,17 +3,17 @@
 * MIT License
 *
 * Copyright (c) 2023 Konstantinos Despoinidis
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 * copies of the Software, and to permit persons to whom the Software is
 * furnished to do so, subject to the following conditions:
-* 
+*
 * The above copyright notice and this permission notice shall be included in all
 * copies or substantial portions of the Software.
-* 
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,7 +21,7 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
-* 
+*
  */
 package kdesp73.themeLib;
 
@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JList;
+import javax.swing.JSlider;
 
 /**
  *
@@ -94,9 +95,22 @@ public class ThemeCollection {
 					break;
 				case "scrollbar":
 					component.setBackground(theme.getBg());
+					break;
 				case "progress_bar":
 					component.setBackground(theme.getProgress_bar());
 					break;
+				case "slider":
+					// if(component instanceof JSlider slider){
+					// 	slider.setBackground(theme.getSliderBg());
+					// 	slider.setUI(new BasicSliderUI(slider) {
+					// 		@Override
+					// 		public void paintThumb(Graphics g) {
+					// 			Graphics2D g2d = (Graphics2D) g;
+					// 			g2d.setPaint(Color.ORANGE); // Customize thumb color
+					// 			g2d.fill(thumbRect);
+					// 		}
+					// 	});
+					// }
 				case "extra_0":
 					component.setBackground(theme.getExtras().get(0));
 					break;
