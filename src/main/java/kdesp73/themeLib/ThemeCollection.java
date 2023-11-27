@@ -29,9 +29,10 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Set;
 
-import javax.swing.JList;
-import javax.swing.JSlider;
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -39,223 +40,147 @@ import javax.swing.JSlider;
  */
 public class ThemeCollection {
 
-	private ArrayList<Theme> themes = new ArrayList<>();
+        private ArrayList<Theme> themes = new ArrayList<>();
 
-	public ThemeCollection() {
+        public ThemeCollection() {
 
-	}
+        }
 
-	/**
-	 * This method searches through every
-	 * child of the parent container and
-	 * applies the appropriate colors if the
-	 * name matches the predetermined ones
-	 *
-	 * @param component The parent container
-	 *                  the theme will be applied to
-	 * @param theme     Theme of choice
-	 */
-	public static void applyTheme(Component component, Theme theme) {
-		String name = component.getName();
+        public ThemeCollection(String path) {
+                loadThemes(path);
+        }
 
-		try {
-			switch (name) {
-				case "null.glassPane":
-					break;
-				case "null.layeredPane":
-					break;
-				case "null.contentPane":
-					break;
-				case "bg":
-					component.setBackground(theme.getBg());
-					break;
-				case "bg_2":
-					component.setBackground(theme.getBg_2());
-					break;
-				case "fg":
-					component.setForeground(theme.getFg());
-					break;
-				case "fg_2":
-					component.setForeground(theme.getFg_2());
-					break;
-				case "btn":
-					component.setBackground(theme.getBtn());
-					component.setForeground(theme.getBtn_fg());
-					break;
-				case "textbox":
-					component.setBackground(theme.getTextbox());
-					component.setForeground(theme.getTextbox_fg());
-					break;
-				case "list":
-					if (component instanceof JList jList) {
-						jList.setBackground(theme.getList());
-						jList.setForeground(theme.getList_fg());
-						jList.setSelectionBackground(theme.getList_focus());
-					}
-					break;
-				case "scrollbar":
-					component.setBackground(theme.getBg());
-					break;
-				case "progress_bar":
-					component.setBackground(theme.getProgress_bar());
-					break;
-				case "slider":
-					// if(component instanceof JSlider slider){
-					// 	slider.setBackground(theme.getSliderBg());
-					// 	slider.setUI(new BasicSliderUI(slider) {
-					// 		@Override
-					// 		public void paintThumb(Graphics g) {
-					// 			Graphics2D g2d = (Graphics2D) g;
-					// 			g2d.setPaint(Color.ORANGE); // Customize thumb color
-					// 			g2d.fill(thumbRect);
-					// 		}
-					// 	});
-					// }
-				case "extra_0":
-					component.setBackground(theme.getExtras().get(0));
-					break;
-				case "extra_1":
-					component.setBackground(theme.getExtras().get(1));
-					break;
-				case "extra_2":
-					component.setBackground(theme.getExtras().get(2));
-					break;
-				case "extra_3":
-					component.setBackground(theme.getExtras().get(3));
-					break;
-				case "extra_4":
-					component.setBackground(theme.getExtras().get(4));
-					break;
-				case "extra_5":
-					component.setBackground(theme.getExtras().get(5));
-					break;
-				case "extra_6":
-					component.setBackground(theme.getExtras().get(6));
-					break;
-				case "extra_7":
-					component.setBackground(theme.getExtras().get(7));
-					break;
-				case "extra_8":
-					component.setBackground(theme.getExtras().get(8));
-					break;
-				case "extra_9":
-					component.setBackground(theme.getExtras().get(9));
-					break;
-				default:
-					break;
-			}
-		} catch (NullPointerException e) {
-			// System.out.println("Null name");
-		}
+        /**
+         * This method searches through every child of the parent container and
+         * applies the appropriate colors if the name matches the predetermined
+         * ones
+         *
+         * @param component The parent container the theme will be applied to
+         * @param theme Theme of choice
+         */
+        public static void applyTheme(Component component, Theme theme) {
+                Set<String> keys = theme.keySet();
 
-		// Recurse through every component
-		if (component instanceof Container container) {
-			for (Component child : container.getComponents()) {
-				applyTheme(child, theme);
-			}
-		}
-	}
+                for (String key : keys) {
+                        if (!component.getName().equals(key)) {
+                                continue;
+                        }
 
-	public Theme matchTheme(String themeName) {
-		for (Theme theme : themes) {
-			if (theme.getName().equals(themeName))
-				return theme;
-		}
-		return null;
-	}
+                        Colors colors = theme.get(key);
 
-	/**
-	 * Adds a theme to the themes field of
-	 * the ThemeCollection object
-	 *
-	 * @param theme Theme to be added
-	 */
-	public void addTheme(Theme theme) {
-		themes.add(theme);
-	}
+                        component.setBackground(colors.background);
+                        component.setForeground(colors.foreground);
 
-	public void loadThemes(File folder_dir) {
-		themes.clear();
-		ArrayList<String> yamlFiles = Utils.listFiles(folder_dir);
+                        if (component instanceof JComponent jcomponent) { // Component
+                                Utils.changeBorderColor(jcomponent, colors.border);
+                        }
 
-		for (int i = 0; i < yamlFiles.size(); i++) {
-			Theme newTheme = null;
+                        if (component instanceof JTextComponent textcomponent) { // TextComponents
+                                textcomponent.setCaretColor(colors.caret);
+                                textcomponent.setDisabledTextColor(colors.disabledText);
+                                textcomponent.setSelectionColor(colors.selectionBackground);
+                                textcomponent.setSelectedTextColor(colors.selectionForeground);
+                                Utils.changeHighlightColor(textcomponent, colors.highlight);
+                        } else if (component instanceof JSlider slider) { // Slider
+                                slider.setUI(new CustomSliderUI(slider, colors.track, colors.thumb, colors.focus));
+                        } else if (component instanceof JScrollPane scrollpane) { // Scrollbars
+                                scrollpane.getVerticalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
+                                scrollpane.getHorizontalScrollBar().setUI(new CustomScrollPaneUI(colors.track, colors.thumb));
+                        } else if (component instanceof JList list) { // List
+                                list.setSelectionBackground(colors.selectionBackground);
+                                list.setSelectionForeground(colors.selectionForeground);
+                        } else if (component instanceof JTable table) { // Table
+                                table.setGridColor(colors.gridColor);
+                                table.setSelectionBackground(colors.selectionBackground);
+                                table.setSelectionForeground(colors.selectionForeground);
+                        } else if (component instanceof JSpinner spinner) { // Spinner
+                                spinner.setUI(new CustomSpinnerUI(colors.background, colors.foreground, colors.arrowButtonBackground, colors.arrowButtonForeground, colors.disabledText));
+                        } else if (component instanceof JTabbedPane tabbedpane) { // TabbedPane
+                                tabbedpane.setUI(new CustomTabbedPaneUI(colors.background, colors.foreground, colors.selectionBackground, colors.selectionForeground, colors.background));
+                        } else if (component instanceof JSplitPane) { // SplitPane
+                                UIManager.put("SplitPane.background", colors.background);
+                                UIManager.put("SplitPane.foreground", colors.foreground);
+                                UIManager.put("SplitPaneDivider.draggingColor", colors.thumb);
+                        }
+                }
+                
+                // Recurse through every component
+                if (component instanceof Container container) {
+                        for (Component child : container.getComponents()) {
+                                applyTheme(child, theme);
+                        }
+                }
+        }
 
-			String osName = System.getProperty("os.name");
+        public Theme matchTheme(String themeName) {
+                for (Theme theme : themes) {
+                        if (theme.getName().equals(themeName)) {
+                                return theme;
+                        }
+                }
+                return null;
+        }
 
-			// You can perform OS-specific operations based on the value of osName
-			if (osName.toLowerCase().contains("windows")) {
-				newTheme = new Theme(new YamlFile(folder_dir.getPath() + "\\" + yamlFiles.get(i)));
-			} else if (osName.toLowerCase().contains("linux")) {
-				newTheme = new Theme(new YamlFile(folder_dir.getPath() + "/" + yamlFiles.get(i)));
-			} else {
-				System.out.println("Unsupported operating system.");
-			}
+        /**
+         * Adds a theme to the themes field of the ThemeCollection object
+         *
+         * @param theme Theme to be added
+         */
+        public void addTheme(Theme theme) {
+                themes.add(theme);
+        }
 
-			themes.add(newTheme);
-		}
-	}
+        public final void loadThemes(String path) {
+                File file = new File(path);
+                themes.clear();
+                ArrayList<String> yamlFiles = Utils.listFiles(file);
 
-	/**
-	 * Loads themes from a Array of JSON
-	 * strings
-	 *
-	 * @param jsons Array of appropriate JSON
-	 *              strings to be loaded in the ArrayList
-	 *              field of the ThemeCollection object
-	 */
-	public void loadThemes(String[] jsons) {
-		themes.clear();
-		for (String json : jsons) {
-			Theme newTheme = new Theme(new JsonString(json));
-			themes.add(newTheme);
-		}
-	}
+                for (int i = 0; i < yamlFiles.size(); i++) {
+                        Theme newTheme = null;
 
-	/**
-	 * Empties the themes field of
-	 * the ThemeCollection object
-	 *
-	 */
-	public void clear() {
-		themes.clear();
-	}
+                        String osName = System.getProperty("os.name");
 
-	private class Utils {
+                        // You can perform OS-specific operations based on the value of osName
+                        if (osName.toLowerCase().contains("windows")) {
+                                newTheme = new Theme(new YamlFile(file.getPath() + "\\" + yamlFiles.get(i)));
+                        } else if (osName.toLowerCase().contains("linux")) {
+                                newTheme = new Theme(new YamlFile(file.getPath() + "/" + yamlFiles.get(i)));
+                        } else {
+                                System.out.println("Unsupported operating system.");
+                        }
 
-		private static ArrayList<String> listFiles(final File folder) {
-			ArrayList<String> arr = new ArrayList<>();
-			for (final File fileEntry : folder.listFiles()) {
-				if (fileEntry.isDirectory()) {
-					listFiles(fileEntry);
-				} else {
-					arr.add(fileEntry.getName());
-				}
-			}
-			return arr;
-		}
-	}
+                        themes.add(newTheme);
+                }
+        }
 
-	public ArrayList<Theme> getThemes() {
-		return themes;
-	}
+        /**
+         * Empties the themes field of the ThemeCollection object
+         *
+         */
+        public void clear() {
+                themes.clear();
+        }
 
-	public void setThemes(ArrayList<Theme> themes) {
-		this.themes = themes;
-	}
+        public ArrayList<Theme> getThemes() {
+                return themes;
+        }
 
-	@Override
-	public String toString() {
-		String s = "";
+        public void setThemes(ArrayList<Theme> themes) {
+                this.themes = themes;
+        }
 
-		s = s + "Themes{";
-		for (int i = 0; i < themes.size(); i++) {
-			s = s + themes.get(i);
-			s = s + "\n";
-		}
-		s = s + "}";
+        @Override
+        public String toString() {
+                String s = "";
 
-		return s;
-	}
+                s = s + "Themes{";
+                for (int i = 0; i < themes.size(); i++) {
+                        s = s + themes.get(i);
+                        s = s + "\n";
+                }
+                s = s + "}";
+
+                return s;
+        }
 
 }

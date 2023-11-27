@@ -19,14 +19,12 @@ public class Colors {
 	public Color selectionBackground = null;
 	public Color selectionForeground = null;
 	public Color border = null;
-	public Color focusBorder = null;
+	public Color focus = null;
 	public Color disabledText = null;
-	public Color rollover = null;
 	public Color pressed = null;
 	public Color disabledBackground = null;
 	public Color toolTipBackground = null;
 	public Color toolTipText = null;
-	public boolean focusPainted = false; // For buttons
 	public Color shadow = null;
 	public Color highlight = null;
 	public Color linkColor = null;
@@ -35,18 +33,7 @@ public class Colors {
 	public Color track = null; // For scroll bars
 	public Color arrowButtonBackground = null; // For components with arrow buttons
 	public Color arrowButtonForeground = null; // For components with arrow buttons
-	public Color carret = null;
-
-	public boolean checkButton() {
-		boolean isComplete = true;
-
-		isComplete = isComplete && (background != null);
-		isComplete = isComplete && (foreground != null);
-		isComplete = isComplete && (rollover != null);
-		isComplete = isComplete && (pressed != null);
-
-		return isComplete;
-	}
+	public Color caret = null;
 
 	// Same for every component
 	public String toYAMLString() {
@@ -65,14 +52,12 @@ public class Colors {
 		appendColorPair(sb, "selectionBackground", selectionBackground);
 		appendColorPair(sb, "selectionForeground", selectionForeground);
 		appendColorPair(sb, "border", border);
-		appendColorPair(sb, "focusBorder", focusBorder);
+		appendColorPair(sb, "focus", focus);
 		appendColorPair(sb, "disabledText", disabledText);
-		appendColorPair(sb, "rollover", rollover);
 		appendColorPair(sb, "pressed", pressed);
 		appendColorPair(sb, "disabledBackground", disabledBackground);
 		appendColorPair(sb, "toolTipBackground", toolTipBackground);
 		appendColorPair(sb, "toolTipText", toolTipText);
-		sb.append("    ").append("focusPainted").append(": ").append(focusPainted).append("\n");
 		appendColorPair(sb, "shadow", shadow);
 		appendColorPair(sb, "highlight", highlight);
 		appendColorPair(sb, "linkColor", linkColor);
@@ -81,7 +66,7 @@ public class Colors {
 		appendColorPair(sb, "track", track);
 		appendColorPair(sb, "arrowButtonBackground", arrowButtonBackground);
 		appendColorPair(sb, "arrowButtonForeground", arrowButtonForeground);
-		appendColorPair(sb, "carret", carret);
+		appendColorPair(sb, "carret", caret);
 
 		return sb.toString();
 	}

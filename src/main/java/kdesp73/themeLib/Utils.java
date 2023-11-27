@@ -5,9 +5,17 @@
 package kdesp73.themeLib;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JComponent;
+import javax.swing.border.*;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -15,9 +23,13 @@ import java.io.IOException;
  */
 public class Utils {
 
-	static Color hexToColor(String hex) {
+	static Color hexToColor(Object hex) {
+		if (hex == null) {
+			return null;
+		}
+
 		hex = "#" + hex;
-		return Color.decode(hex);
+		return Color.decode(hex.toString());
 	}
 
 	static String ColorToHex(Color c) {
@@ -48,6 +60,18 @@ public class Utils {
 		return "" + key + ": " + value + "\n";
 	}
 
+	public static ArrayList<String> listFiles(final File folder) {
+		ArrayList<String> arr = new ArrayList<>();
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listFiles(fileEntry);
+			} else {
+				arr.add(fileEntry.getName());
+			}
+		}
+		return arr;
+	}
+
 	public static String readFile(String path) {
 		String content = "";
 		try {
@@ -70,5 +94,90 @@ public class Utils {
 		}
 
 		return content;
+	}
+
+	public static void changeBorderColor(JComponent component, Color newColor) {
+		// Get the existing border
+		Border existingBorder = component.getBorder();
+
+		// Handle different types of borders
+		if (existingBorder instanceof LineBorder) {
+			changeLineColorBorder((LineBorder) existingBorder, newColor, component);
+		} else if (existingBorder instanceof CompoundBorder) {
+			changeCompoundBorder((CompoundBorder) existingBorder, newColor, component);
+		} else if (existingBorder instanceof EtchedBorder) {
+			changeEtchedBorder((EtchedBorder) existingBorder, newColor, component);
+		} else if (existingBorder instanceof BevelBorder) {
+			throw new RuntimeException("Not implemented yet.");
+		} else if (existingBorder instanceof MatteBorder) {
+			throw new RuntimeException("Not implemented yet.");
+		} else {
+			// For unknown border types, change to a LineBorder with the new color
+			component.setBorder(new LineBorder(newColor));
+		}
+	}
+
+	private static void changeLineColorBorder(LineBorder existingLineBorder, Color newColor, JComponent component) {
+		// Create a new LineBorder with the desired color while keeping other properties unchanged
+		LineBorder newLineBorder = new LineBorder(newColor, existingLineBorder.getThickness());
+
+		// Set the new LineBorder on the component
+		component.setBorder(newLineBorder);
+	}
+
+	private static void changeCompoundBorder(CompoundBorder existingCompoundBorder, Color newColor, JComponent component) {
+		// Get the inner and outer borders
+		Border innerBorder = existingCompoundBorder.getInsideBorder();
+		Border outerBorder = existingCompoundBorder.getOutsideBorder();
+
+		// Change the inner border color
+		changeBorderColorComponent(innerBorder, newColor);
+
+		// Set the modified CompoundBorder on the component
+		component.setBorder(new CompoundBorder(outerBorder, innerBorder));
+	}
+
+	private static void changeEtchedBorder(EtchedBorder existingEtchedBorder, Color newColor, JComponent component) {
+		// Create a new EtchedBorder with the desired color while keeping other properties unchanged
+		EtchedBorder newEtchedBorder = new EtchedBorder(existingEtchedBorder.getEtchType(), newColor, existingEtchedBorder.getHighlightColor());
+
+		// Set the new EtchedBorder on the component
+		component.setBorder(newEtchedBorder);
+	}
+
+	private static void changeBorderColorComponent(Border existingBorder, Color newColor) {
+		if (existingBorder instanceof LineBorder) {
+			changeLineColorBorder((LineBorder) existingBorder, newColor, null);
+		} else if (existingBorder instanceof CompoundBorder) {
+			changeCompoundBorder((CompoundBorder) existingBorder, newColor, null);
+		} else if (existingBorder instanceof EtchedBorder) {
+			changeEtchedBorder((EtchedBorder) existingBorder, newColor, null);
+		} else if (existingBorder instanceof BevelBorder) {
+			throw new RuntimeException("Not implemented yet.");
+		} else if (existingBorder instanceof MatteBorder) {
+			throw new RuntimeException("Not implemented yet.");
+		}
+	}
+
+	public static void changeHighlightColor(JTextComponent textComponent, Color newColor) {
+		Highlighter highlighter = textComponent.getHighlighter();
+		Highlighter.Highlight[] highlights = highlighter.getHighlights();
+
+		DefaultHighlighter.DefaultHighlightPainter newPainter = new DefaultHighlighter.DefaultHighlightPainter(newColor);
+
+		for (Highlighter.Highlight highlight : highlights) {
+			int start = highlight.getStartOffset();
+			int end = highlight.getEndOffset();
+
+			// Remove the existing highlight
+			highlighter.removeHighlight(highlight);
+
+			try {
+				// Apply the new highlight color
+				highlighter.addHighlight(start, end, newPainter);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

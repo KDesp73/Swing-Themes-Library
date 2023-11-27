@@ -46,20 +46,7 @@ import org.yaml.snakeyaml.Yaml;
 public class Theme extends HashMap<String, Colors> {
 
 	private String name;
-	private String json;
 	private YamlFile yaml;
-
-	/**
-	 * Creates a theme using a JSON string
-	 *
-	 * @param json JsonString object to be parsed
-	 */
-	public Theme(JsonString json) {
-		this.json = json.getJson();
-
-		// Parse json into theme
-		parseJson(json);
-	}
 
 	/**
 	 * Creates a theme using a YAML file
@@ -106,49 +93,31 @@ public class Theme extends HashMap<String, Colors> {
 			Colors colors = new Colors();
 			colors.key = componentName;
 
-			colors.background = Utils.hexToColor("" + colorAttributes.get("background"));
-			colors.foreground = Utils.hexToColor("" + colorAttributes.get("foreground"));
-			colors.selectionBackground = Utils.hexToColor("" + colorAttributes.get("selectionBackground"));
-			colors.selectionForeground = Utils.hexToColor("" + colorAttributes.get("selectionForeground"));
-			colors.border = Utils.hexToColor("" + colorAttributes.get("border"));
-			colors.focusBorder = Utils.hexToColor("" + colorAttributes.get("focusBorder"));
-			colors.disabledText = Utils.hexToColor("" + colorAttributes.get("disabledText"));
-			colors.rollover = Utils.hexToColor("" + colorAttributes.get("rollover"));
-			colors.pressed = Utils.hexToColor("" + colorAttributes.get("pressed"));
-			colors.disabledBackground = Utils.hexToColor("" + colorAttributes.get("disabledBackground"));
-			colors.toolTipBackground = Utils.hexToColor("" + colorAttributes.get("toolTipBackground"));
-			colors.toolTipText = Utils.hexToColor("" + colorAttributes.get("toolTipText"));
-			colors.focusPainted = (boolean) colorAttributes.get("focusPainted");
-			colors.shadow = Utils.hexToColor("" + colorAttributes.get("shadow"));
-			colors.highlight = Utils.hexToColor("" + colorAttributes.get("highlight"));
-			colors.linkColor = Utils.hexToColor("" + colorAttributes.get("linkColor"));
-			colors.gridColor = Utils.hexToColor("" + colorAttributes.get("gridColor"));
-			colors.thumb = Utils.hexToColor("" + colorAttributes.get("thumb"));
-			colors.track = Utils.hexToColor("" + colorAttributes.get("track"));
-			colors.arrowButtonBackground = Utils.hexToColor("" + colorAttributes.get("arrowButtonBackground"));
-			colors.arrowButtonForeground = Utils.hexToColor("" + colorAttributes.get("arrowButtonForeground"));
+			colors.background = Utils.hexToColor(colorAttributes.get("background"));
+			colors.foreground = Utils.hexToColor(colorAttributes.get("foreground"));
+			colors.selectionBackground = Utils.hexToColor(colorAttributes.get("selectionBackground"));
+			colors.selectionForeground = Utils.hexToColor(colorAttributes.get("selectionForeground"));
+			colors.border = Utils.hexToColor(colorAttributes.get("border"));
+			colors.focus = Utils.hexToColor(colorAttributes.get("focus"));
+			colors.disabledText = Utils.hexToColor(colorAttributes.get("disabledText"));
+			colors.pressed = Utils.hexToColor(colorAttributes.get("pressed"));
+			colors.disabledBackground = Utils.hexToColor(colorAttributes.get("disabledBackground"));
+			colors.toolTipBackground = Utils.hexToColor(colorAttributes.get("toolTipBackground"));
+			colors.toolTipText = Utils.hexToColor(colorAttributes.get("toolTipText"));
+			colors.shadow = Utils.hexToColor(colorAttributes.get("shadow"));
+			colors.highlight = Utils.hexToColor(colorAttributes.get("highlight"));
+			colors.linkColor = Utils.hexToColor(colorAttributes.get("linkColor"));
+			colors.gridColor = Utils.hexToColor(colorAttributes.get("gridColor"));
+			colors.thumb = Utils.hexToColor(colorAttributes.get("thumb"));
+			colors.track = Utils.hexToColor(colorAttributes.get("track"));
+			colors.arrowButtonBackground = Utils.hexToColor(colorAttributes.get("arrowButtonBackground"));
+			colors.arrowButtonForeground = Utils.hexToColor(colorAttributes.get("arrowButtonForeground"));
 
 			// Add Colors object to the theme
 			theme.put(componentName, colors);
 		}
 
 		return theme;
-	}
-
-	/**
-	 * Parse information from a JSON string into
-	 * the Theme object
-	 *
-	 * @param jsonString JsonString object to be
-	 * parsed
-	 * @throws KeyNotFoundException
-	 */
-	public void parseJson(JsonString jsonString) {
-		String newJson = jsonString.getJson().replaceAll(",", ", ");
-
-		name = Utils.getJsonValue(newJson, "name").replaceAll("\"", "");
-
-		this.json = newJson;
 	}
 
 	/**
@@ -187,16 +156,6 @@ public class Theme extends HashMap<String, Colors> {
 		return new YamlFile(path);
 	}
 
-	/**
-	 * Generate a JSON string containing the
-	 * information of this Theme object
-	 *
-	 * @return JsonString
-	 */
-	public JsonString generateJson() {
-		return null;
-	}
-
 	@Override
 	public Colors put(String key, Colors value) {
 		value.key = key;
@@ -209,14 +168,6 @@ public class Theme extends HashMap<String, Colors> {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getJson() {
-		return json;
-	}
-
-	public void setJson(String json) {
-		this.json = json;
 	}
 
 	public YamlFile getYaml() {
@@ -253,14 +204,12 @@ public class Theme extends HashMap<String, Colors> {
 		appendColorAttribute(sb, "selectionBackground", colors.selectionBackground);
 		appendColorAttribute(sb, "selectionForeground", colors.selectionForeground);
 		appendColorAttribute(sb, "border", colors.border);
-		appendColorAttribute(sb, "focusBorder", colors.focusBorder);
+		appendColorAttribute(sb, "focus", colors.focus);
 		appendColorAttribute(sb, "disabledText", colors.disabledText);
-		appendColorAttribute(sb, "rollover", colors.rollover);
 		appendColorAttribute(sb, "pressed", colors.pressed);
 		appendColorAttribute(sb, "disabledBackground", colors.disabledBackground);
 		appendColorAttribute(sb, "toolTipBackground", colors.toolTipBackground);
 		appendColorAttribute(sb, "toolTipText", colors.toolTipText);
-		appendColorAttribute(sb, "focusPainted", colors.focusPainted);
 		appendColorAttribute(sb, "shadow", colors.shadow);
 		appendColorAttribute(sb, "highlight", colors.highlight);
 		appendColorAttribute(sb, "linkColor", colors.linkColor);
@@ -269,7 +218,7 @@ public class Theme extends HashMap<String, Colors> {
 		appendColorAttribute(sb, "track", colors.track);
 		appendColorAttribute(sb, "arrowButtonBackground", colors.arrowButtonBackground);
 		appendColorAttribute(sb, "arrowButtonForeground", colors.arrowButtonForeground);
-		appendColorAttribute(sb, "carret", colors.carret);
+		appendColorAttribute(sb, "carret", colors.caret);
 	}
 
 	private void appendColorAttribute(StringBuilder sb, String key, Object value) {

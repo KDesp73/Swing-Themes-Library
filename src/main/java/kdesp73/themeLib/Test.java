@@ -17,7 +17,23 @@ public class Test {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Theme theme = Theme.parseYaml(new YamlFile("/home/konstantinos/Documents/TestTheme.yml"));
-
 		System.out.println(theme);
+
+//		Theme t = new Theme("TestTheme");
+//		Colors c = new Colors();
+//		c.background = Color.BLACK;
+//		c.carret = Color.BLUE;
+//		c.arrowButtonForeground = Color.WHITE;
+//		c.border = Color.GRAY;
+//		c.focusPainted = true;
+//		c.focusBorder = Color.black;
+//		c.gridColor = Color.magenta;
+//
+//		c.key = "panel";
+//		System.out.println(c.toYAMLString());
+//
+//		t.put("button", c);
+//
+//		t.generateYaml("/home/konstantinos/Documents/");
 	}
 }
