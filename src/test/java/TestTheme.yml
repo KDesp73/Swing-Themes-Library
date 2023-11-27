@@ -1,0 +1,63 @@
+name: TestTheme
+
+bg: 
+    background: ff0000
+    foreground: ffffff
+
+progress_bar: 
+    background: 000000
+    foreground: 0000FF
+
+list: 
+    background: 000000
+    foreground: ffffff
+    selectionBackground: 808080
+    selectionForeground: ffffff
+
+combo_box: 
+    background: FFFFFF
+    foreground: FF0000
+    selectionBackground: 000000
+    selectionForeground: FFFFFF
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: 000000
+    arrowButtonForeground: 000000
+    caret: null
+
+button: 
+    background: 00ff00
+    foreground: 000000
+    selectionBackground: null
+    selectionForeground: null
+    border: null
+    focus: null
+    disabledForeground: null
+    pressed: null
+    disabledBackground: null
+    toolTipBackground: null
+    toolTipText: null
+    shadow: null
+    highlight: null
+    linkColor: null
+    gridColor: null
+    thumb: null
+    track: null
+    arrowButtonBackground: null
+    arrowButtonForeground: null
+    caret: null
+    dragging: null
+
+splitpane: 
+    dragging: 00ff00

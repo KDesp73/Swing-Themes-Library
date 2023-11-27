@@ -34,6 +34,7 @@ public class Colors {
         public Color arrowButtonBackground = null; // For components with arrow buttons
         public Color arrowButtonForeground = null; // For components with arrow buttons
         public Color caret = null;
+        public Color dragging = null; // For split pane
 
         private boolean checkColors(Color... colors){
                 for(Color color : colors){
@@ -57,6 +58,14 @@ public class Colors {
         
         protected boolean checkTabbedPane(){
                 return checkColors(background, foreground, selectionBackground, selectionForeground);
+        }
+        
+        protected boolean checkProgressBar(){
+            return checkColors(background, foreground, selectionForeground);
+        }
+        
+        protected boolean checkComboBox(){
+            return checkColors(background, foreground, selectionBackground, selectionForeground, arrowButtonBackground, arrowButtonForeground);
         }
 
         // Same for every component
@@ -90,7 +99,8 @@ public class Colors {
                 appendColorPair(sb, "track", track);
                 appendColorPair(sb, "arrowButtonBackground", arrowButtonBackground);
                 appendColorPair(sb, "arrowButtonForeground", arrowButtonForeground);
-                appendColorPair(sb, "carret", caret);
+                appendColorPair(sb, "caret", caret);
+                appendColorPair(sb, "dragging", dragging);
 
                 return sb.toString();
         }
